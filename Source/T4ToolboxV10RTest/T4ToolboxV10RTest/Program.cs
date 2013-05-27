@@ -10,6 +10,7 @@ namespace TestCustomDirective1
     {
         static void Main(string[] args)
         {
+            //Do Nothing
         }
     }
 }

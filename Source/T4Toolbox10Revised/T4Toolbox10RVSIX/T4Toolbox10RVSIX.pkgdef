@@ -1,0 +1,6 @@
+﻿[$RootKey$\TextTemplating]
+[$RootKey$\TextTemplating\DirectiveProcessors]
+[$RootKey$\TextTemplating\DirectiveProcessors\T4Toolbox10R.TransformationContextProcessor]
+@="T4Toolbox 10R Infrastructure"
+"Class"="T4Toolbox.TransformationContextProcessor"
+"CodeBase"="$PackageFolder$\T4Toolbox10R.dll"

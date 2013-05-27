@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Generated\TestTemplates\DemoOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -47,6 +48,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestT4Toolbox.tt.log">
+      <DependentUpon>TestT4Toolbox.tt</DependentUpon>
+    </Content>
     <Content Include="TestT4Toolbox.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="T4Toolbox10RVSIX..b4b66158-8169-403d-8041-417911ba1542" Version="1.0.0" Language="en-US" Publisher="jsrsoft" />
+    <DisplayName>T4 Toolbox 10R</DisplayName>
+    <Description xml:space="preserve">T4 Toolbox10R, a derrivatve version of T4 Toolbox v10.10.13.1, re versioned to 1.0.0, for VS2012 and uses the sources from t4toolbox.codeplex.com.
+It provides only the DirectiveProcessor for T4 Template processing. With thanks to the T4 Team for their original work.</Description>
+    <License>License.rtf</License>
+    <ReleaseNotes>ReadMe.txt</ReleaseNotes>
+    <Icon>TextTemplate.ico</Icon>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="11.0" Id="Microsoft.VisualStudio.Pro"  />
+    <InstallationTarget Version="11.0" Id="Microsoft.VisualStudio.Premium" />
+    <InstallationTarget Version="11.0" Id="Microsoft.VisualStudio.Ultimate" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

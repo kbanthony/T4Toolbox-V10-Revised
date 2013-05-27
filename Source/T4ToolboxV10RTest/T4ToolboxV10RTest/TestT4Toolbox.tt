@@ -18,7 +18,6 @@
     public class TestGen : Generator
     {
         private GeneratedTextTransformation gtt;
-        private string fileName = "";
 
         public TestGen(GeneratedTextTransformation gttn)
         {
@@ -68,7 +67,7 @@
 //  Copyright © . All Rights Reserved.
 // </copyright>
 
-public class Template1 : Template
+public class Template1 : CSharpTemplate
 {
     /// <summary>Initializes a new instance of the ContextCs class.</summary>
     public Template1() 
