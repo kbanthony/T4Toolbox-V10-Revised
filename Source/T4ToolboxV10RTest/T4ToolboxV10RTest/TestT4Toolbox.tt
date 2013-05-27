@@ -1,0 +1,113 @@
+﻿<#@ template language="C#" debug="True" hostspecific="True" #>
+<#@ output extension="txt" #>
+<# //Use Directive Processor directly. There is no T4Toolbox.tt #>
+<#@ TransformationContext processor="T4Toolbox10R.TransformationContextProcessor" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="T4Toolbox" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<# // For this simple example, we place the Script, Generator and Template together in this file.#>
+<# // You will have had to load the T4ToolboxV10 VSIX for this script to work.#>
+<#
+    var gen = new TestGen(this);
+    gen.Run();
+#>
+<#+
+    public class TestGen : Generator
+    {
+        private GeneratedTextTransformation gtt;
+        private string fileName = "";
+
+        public TestGen(GeneratedTextTransformation gttn)
+        {
+            gtt = gttn;
+        }
+
+        public static ITextTemplatingEngineHost GetTextTemplatingEngineHost()
+        {
+            //As this T4Toolbox is the original V2010 code, we use TransformationContext.Host
+            return TransformationContext.Host;
+        }
+
+        /// <summary>Gets the TemplatePath property.</summary>
+        /// <remarks>This ends up being the project folder.</remarks>
+        public static string TemplatePath {
+            get 
+            {
+                return System.IO.Path.GetDirectoryName(GetTextTemplatingEngineHost().TemplateFile); 
+            }
+        }
+
+        protected override void RunCore()
+        {
+            string projectfolder = TemplatePath;
+            var generatedfolder = System.IO.Path.Combine(projectfolder, "Generated");
+            generatedfolder = System.IO.Path.Combine(generatedfolder, "TestTemplates");
+
+            var iTemplate1 = new Template1();
+            iTemplate1.RenderToFile(System.IO.Path.Combine(generatedfolder,"DemoOutput.cs"));
+        }
+
+        /// <summary>Validates code generation parameters.</summary>
+        protected override void Validate()
+        {
+        }
+
+        private string ResolveRelativePath(string referencePath, string relativePath) 
+        { 
+            System.Uri uri = new System.Uri(Path.Combine(referencePath, relativePath)); 
+            return System.IO.Path.GetFullPath(uri.AbsolutePath); 
+        }
+}
+
+#>
+<#+
+// <copyright file="Template1.cs.ttinclude" company="">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+public class Template1 : Template
+{
+    /// <summary>Initializes a new instance of the ContextCs class.</summary>
+    public Template1() 
+    {
+    }
+
+    /// <summary>Renders output.</summary>
+    public override string TransformText()
+    {
+        base.TransformText();
+#>
+<#+
+        GenUsings();
+        return this.GenerationEnvironment.ToString().Replace("\t", "    ");;
+    }
+
+    /// <summary>Validates the template.</summary>
+    protected override void Validate()
+    {
+    }
+
+    ///
+    /// Usings
+    /// 
+    private void GenUsings()
+    {
+    #>
+    //
+    // This is auto-generated file. Do not change manually this code.
+    // If you want to extend or override functionality please write
+    // appropriate partial methods.
+    //
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Configuration;
+
+    <#+
+    }	
+}
+#>
