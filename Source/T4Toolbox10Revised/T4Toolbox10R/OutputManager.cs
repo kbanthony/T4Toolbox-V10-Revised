@@ -76,9 +76,11 @@ namespace T4Toolbox
 
             string previousDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Path.GetDirectoryName(host.TemplateFile);
+
             try
             {
                 Validate(output);
+
                 if (string.IsNullOrEmpty(output.File))
                 {
                     this.AppendToStandardOutput(output, content, host, transformation);

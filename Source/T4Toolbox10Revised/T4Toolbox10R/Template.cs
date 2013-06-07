@@ -117,21 +117,6 @@ namespace T4Toolbox
         }
 
         /// <summary>
-        /// Transforms the template and saves generated content based on <see cref="Output"/> settings.
-        /// Private, so to not offer this option to Template
-        /// </summary>
-        /// Suggestion made by ggreig in Nov 2008, with thanks
-        private void RenderIfNotExists()
-        {
-            this.OnRendering(EventArgs.Empty);
-            if (this.Enabled)
-            {
-                string content = this.Transform();
-                TransformationContext.RenderIfNotExists(content, this.Output, this.Errors);
-            }
-        }
-
-        /// <summary>
         /// Transforms the template and saves generated content to the specified file.
         /// </summary>
         /// <param name="fileName">
@@ -154,7 +139,8 @@ namespace T4Toolbox
         public void RenderToFileIfNotExists(string fileName)
         {
             this.Output.File = fileName;
-            this.RenderIfNotExists();
+            this.Output.PreserveExistingFile = true;
+            this.Render();
         }
 
         /// <summary>

@@ -49,20 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyFile.cs">
-      <DependentUpon>Script1.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Custom\CustomMyFile.cs" />
+    <Compile Include="Generated\GeneratedMyFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Template2.ttinclude" />
     <None Include="Generator1.ttinclude" />
     <Content Include="Script1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Script1.txt</LastGenOutput>
       <LastOutputs>.\MyFile.cs</LastOutputs>
     </Content>
+    <None Include="Script1.tt.log">
+      <DependentUpon>Script1.tt</DependentUpon>
+    </None>
     <None Include="Template1.ttinclude" />
   </ItemGroup>
   <ItemGroup>

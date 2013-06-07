@@ -5,25 +5,30 @@
 
 public class Generator1 : Generator
 {
-    private GeneratedTextTransformation gtt;
+    private GeneratedTextTransformation _gtt;
+    private string _templateFile;
 
-    public Generator1(GeneratedTextTransformation gttn)
+    public Generator1(GeneratedTextTransformation gtt)
     {
-        gtt = gttn;
-        var host = TransformationContext.Host;
-        var templateFile = host.TemplateFile;
+        _gtt = gtt;
     }
 
     protected override void RunCore()
     {
-        var iTemplate1 = new Template1();
-        
-        //iTemplate1.Output.BuildAction = "TestItemDoesNothing";
-        iTemplate1.Output.PreserveExistingFile = true;
-        iTemplate1.RenderToFile("MyFile.cs");
+        var host = TransformationContext.Host;
+        _templateFile = host.TemplateFile;
+        var folder =  System.IO.Path.GetDirectoryName(_templateFile);
+        var folder1 = System.IO.Path.Combine(folder, "Generated");
+        var folder2 = System.IO.Path.Combine(folder, "Custom");
 
+        var iTemplate1 = new Template1();
+        //iTemplate1.Output.BuildAction = "TestItemDoesNothing";
         //iTemplate1.RenderToFileIfNotExists("MyFile.cs");
-        //iTemplate1.Output.PreserveExistingFile = true;
+        iTemplate1.RenderToFile(System.IO.Path.Combine(folder1, "GeneratedMyFile.cs"));
+
+        var iTemplate2 = new Template2();
+        iTemplate2.RenderToFileIfNotExists(System.IO.Path.Combine(folder2, "CustomMyFile.cs"));
+
     }
 }
 #>

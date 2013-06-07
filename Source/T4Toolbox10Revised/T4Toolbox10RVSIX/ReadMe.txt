@@ -2,9 +2,8 @@
 https://t4toolbox.codeplex.com/
 Many thanks to the T4 Toolbox team.
 
-Version 1.0.1 7-Jun-2013
+Version 1.0.2 7-Jun-2013
 Added RenderToFileIfNotExists(file) in preference to PreserveExistingFile, as it's easy to make a mistake with a separate property.
-PreserveExistingFile now issues a warning.
 Internally, changed MSBuild Api to .Net 4.0 code.
 
 Version 1.0.0

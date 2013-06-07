@@ -3,7 +3,7 @@
 //  Copyright © . All Rights Reserved.
 // </copyright>
 
-public class Template1 : CSharpTemplate
+public class Template2 : CSharpTemplate
 {
     public override string TransformText()
     {

@@ -652,10 +652,17 @@ namespace T4Toolbox
         /// <param name="output">An <see cref="OutputFile"/> object.</param>
         private static void UpdateOutputFile(OutputFile output)
         {
-            // Don't do anything unless the output file has changed and needs to be overwritten
+
             if (File.Exists(output.File))
             {
-                if (output.PreserveExistingFile || output.Content.ToString() == File.ReadAllText(output.File, output.Encoding))
+                // Don't do anything unless the output file has changed and needs to be overwritten
+                if (output.Content.ToString() == File.ReadAllText(output.File, output.Encoding))
+                {
+                    return;
+                }
+
+                // Don't do anything if the file should be preserved.
+                if (output.PreserveExistingFile)
                 {
                     return;
                 }
