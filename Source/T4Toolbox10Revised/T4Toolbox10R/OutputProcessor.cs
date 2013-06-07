@@ -18,7 +18,6 @@ namespace T4Toolbox
     using System.Text;
     using VSLangProj;
     using Constants = EnvDTE.Constants;
-    using MSBuild = Microsoft.Build.BuildEngine;
 
     /// <summary>
     /// This directive processor is a part of the T4 Toolbox infrastructure. Don't
@@ -72,7 +71,6 @@ namespace T4Toolbox
         /// files to the solution and source control.
         /// </remarks>
         internal static void UpdateFiles(ICollection<OutputFile> outputFiles)
-        //JSR public static void UpdateFiles(ICollection<OutputFile> outputFiles)
         {
             //Protect against unnecessary processing
             if (outputFiles.Count > 0)
@@ -286,8 +284,7 @@ namespace T4Toolbox
                 relativePath = GetRelativePath(GetPath(project), output.File);
                 basePath = Path.GetDirectoryName(GetPath(project));
             }
-            else if (output.PreserveExistingFile
-                || !OutputInfo.SamePath(Path.GetDirectoryName(output.File), Environment.CurrentDirectory))
+            else if (output.PreserveExistingFile || !OutputInfo.SamePath(Path.GetDirectoryName(output.File), Environment.CurrentDirectory))
             {
                 // If output file needs to be added to another folder of the current project
                 collection = template.ContainingProject.ProjectItems;
@@ -333,27 +330,31 @@ namespace T4Toolbox
         /// </returns>
         private static ICollection<string> GetAvailableBuildActions(ProjectItem projectItem)
         {
-#pragma warning disable 618
-            // Microsoft.Build.Engine.Project is obsolete in .NET 4.0. 
-            // Code in this method will need to be rewritten when we drop support for DEV9.
-            MSBuild.Project buildProject = new MSBuild.Project();
-#pragma warning restore 618
-
-            buildProject.LoadXml(File.ReadAllText(GetPath(projectItem.ContainingProject)));
-
+            Microsoft.Build.Evaluation.Project buildProject = new Microsoft.Build.Evaluation.Project(projectItem.ContainingProject.FullName);
             List<string> buildActions = new List<string> { "None", "Compile", "Content", "EmbeddedResource" };
-
-            foreach (MSBuild.BuildItemGroup itemGroup in buildProject.ItemGroups)
+            var items = buildProject.Items.Where(ip => ip.ItemType == "AvailableItemName");
+            foreach (var item in items)
             {
-                foreach (MSBuild.BuildItem buildItem in itemGroup)
-                {
-                    if (buildItem.Name == "AvailableItemName")
-                    {
-                        buildActions.Add(buildItem.Include);
-                    }
-                }
+                buildActions.Add(item.EvaluatedInclude);
             }
 
+            //#pragma warning disable 618
+            // Microsoft.Build.Engine.Project is obsolete in .NET 4.0. 
+            // Code in this method will need to be rewritten when we drop support for DEV9.
+            //Microsoft.Build.BuildEngine.Project buildProject = new Microsoft.Build.BuildEngine.Project();
+            //#pragma warning restore 618
+            //buildProject.LoadXml(File.ReadAllText(GetPath(projectItem.ContainingProject)));
+            //List<string> buildActions = new List<string> { "None", "Compile", "Content", "EmbeddedResource" };
+            //foreach (Microsoft.Build.BuildEngine.BuildItemGroup itemGroup in buildProject.ItemGroups)
+            //{
+            //foreach (MSBuild.BuildItem buildItem in itemGroup)
+            //{
+            //    if (buildItem.Name == "AvailableItemName")
+            //    {
+            //        buildActions.Add(buildItem.Include);
+            //    }
+            //}
+            //}
             return buildActions;
         }
 
@@ -374,6 +375,7 @@ namespace T4Toolbox
                 ICollection<string> buildActions = GetAvailableBuildActions(projectItem);
                 if (!buildActions.Contains(output.BuildAction))
                 {
+
                     throw new TransformationException(
                         string.Format(CultureInfo.CurrentCulture, "Build Action {0} is not supported for {1}", output.BuildAction, projectItem.Name));
                 }
@@ -584,9 +586,10 @@ namespace T4Toolbox
             string templateProject = GetPath(template.ContainingProject);
             string templateDirectory = Environment.CurrentDirectory;
 
+            //Only create a log file when the directories or the projects are different.
             if (outputFiles.Any(output =>
-                !OutputInfo.SamePath(Path.GetDirectoryName(output.File), templateDirectory) ||
-                (!string.IsNullOrEmpty(output.Project) && !OutputInfo.SamePath(output.Project, templateProject))))
+                                !OutputInfo.SamePath(Path.GetDirectoryName(output.File), templateDirectory)
+                                || (!string.IsNullOrEmpty(output.Project) && !OutputInfo.SamePath(output.Project, templateProject))))
             {
                 OutputFile log = new OutputFile();
                 log.File = GetLogFileName();

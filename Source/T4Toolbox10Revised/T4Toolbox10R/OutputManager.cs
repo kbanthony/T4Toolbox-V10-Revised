@@ -4,13 +4,12 @@
 
 namespace T4Toolbox
 {
+    using Microsoft.VisualStudio.TextTemplating;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using Microsoft.VisualStudio.TextTemplating;
 
     /// <summary>
     /// This class is a part of T4 Toolbox infrastructure. Don't use it in your code.
@@ -40,7 +39,7 @@ namespace T4Toolbox
         /// </summary>
         private List<OutputFile> outputFiles = new List<OutputFile>();
 
-        #endregion 
+        #endregion
 
         /// <summary>
         /// Creates new or appends to existing output file.

@@ -1,0 +1,29 @@
+﻿<#+
+// <copyright file="Generator1.tt" company="">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+public class Generator1 : Generator
+{
+    private GeneratedTextTransformation gtt;
+
+    public Generator1(GeneratedTextTransformation gttn)
+    {
+        gtt = gttn;
+        var host = TransformationContext.Host;
+        var templateFile = host.TemplateFile;
+    }
+
+    protected override void RunCore()
+    {
+        var iTemplate1 = new Template1();
+        
+        //iTemplate1.Output.BuildAction = "TestItemDoesNothing";
+        iTemplate1.Output.PreserveExistingFile = true;
+        iTemplate1.RenderToFile("MyFile.cs");
+
+        //iTemplate1.RenderToFileIfNotExists("MyFile.cs");
+        //iTemplate1.Output.PreserveExistingFile = true;
+    }
+}
+#>

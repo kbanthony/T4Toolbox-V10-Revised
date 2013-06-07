@@ -360,7 +360,7 @@ namespace T4Toolbox
 
                 if (TransformationContext.transformation != null && !TransformationContext.Errors.HasErrors)
                 {
-                    // Update the files in the default AppDomain to avoid remoting errors on Database projects
+                    //Update the files in the default AppDomain to avoid remoting errors on Database projects
                     //BindingFlags invokeInternalStaticMethod = BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.NonPublic;
                     //AppDomain defaultDomain = (AppDomain)typeof(AppDomain).InvokeMember("GetDefaultDomain", invokeInternalStaticMethod, null, null, null, CultureInfo.InvariantCulture);
 
@@ -371,12 +371,10 @@ namespace T4Toolbox
                     //AppDomain serverAppDomain = AppDomain.CreateDomain("ServerAppDomain", null, setup);
 
                     //var udf = TransformationContext.outputManager;
-                    // defaultDomain.DoCallBack(udf.UpdateFiles);
+                    //defaultDomain.DoCallBack(udf.UpdateFiles);
 
                     OutputProcessor.Host = Host;
                     outputManager.UpdateFiles();
-
-
                 }
 
                 TransformationContext.transformation = null;
@@ -463,8 +461,39 @@ namespace T4Toolbox
         /// </param>
         internal static void Render(string content, OutputInfo output, CompilerErrorCollection errors)
         {
+            if (output.PreserveExistingFile == true)
+            {
+                output.PreserveExistingFile = false;
+                CompilerError error = new CompilerError();
+                error.IsWarning = true;
+                // PreserveExistingFile depends on where it is put (ie before Render) - not atomic. Too risky.
+                // this.PreserveExistingFile = true in a Template would be safer.
+                // But I prefer explict method, as it is quite clear.
+                error.ErrorText = "PreserveExistingFile is deprecated. Always use before Render() in Generator, or in template itself, or use RenderToFileIfNotExists(filename) instead.";
+                error.FileName = Host.TemplateFile;
+                errors.Add(error);
+            }
+
             TransformationContext.ReportErrors(errors);
             TransformationContext.outputManager.Append(output, content, Host, Transformation);
+        }
+
+        /// <summary>
+        /// Saves content to a file and adds it to the Visual Studio <see cref="Project"/>,
+        /// only if the file does not already exist.
+        /// </summary>
+        /// Suggestion made by ggreig in Nov 2008, with thanks
+        public static void RenderIfNotExists(string content, OutputInfo output, CompilerErrorCollection errors)
+        {
+            TransformationContext.ReportErrors(errors);
+
+            string templateDirectory = System.IO.Path.GetDirectoryName(TransformationContext.Host.TemplateFile);
+            string outputFilePath = System.IO.Path.Combine(templateDirectory, output.File);
+
+            if (!System.IO.File.Exists(outputFilePath))
+            {
+                TransformationContext.outputManager.Append(output, content, Host, Transformation);
+            }
         }
 
         #endregion

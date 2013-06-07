@@ -4,10 +4,10 @@
 
 namespace T4Toolbox
 {
+    using Microsoft.VisualStudio.TextTemplating;
     using System;
     using System.CodeDom.Compiler;
     using System.Globalization;
-    using Microsoft.VisualStudio.TextTemplating;
 
     /// <summary>
     /// Abstract base class for nested template classes.
@@ -117,6 +117,21 @@ namespace T4Toolbox
         }
 
         /// <summary>
+        /// Transforms the template and saves generated content based on <see cref="Output"/> settings.
+        /// Private, so to not offer this option to Template
+        /// </summary>
+        /// Suggestion made by ggreig in Nov 2008, with thanks
+        private void RenderIfNotExists()
+        {
+            this.OnRendering(EventArgs.Empty);
+            if (this.Enabled)
+            {
+                string content = this.Transform();
+                TransformationContext.RenderIfNotExists(content, this.Output, this.Errors);
+            }
+        }
+
+        /// <summary>
         /// Transforms the template and saves generated content to the specified file.
         /// </summary>
         /// <param name="fileName">
@@ -126,6 +141,20 @@ namespace T4Toolbox
         {
             this.Output.File = fileName;
             this.Render();
+        }
+
+        /// <summary>
+        /// Renders the template and saves its output to the specified file,
+        /// only if the file does not already exist.
+        /// </summary>
+        /// <param name="fileName">
+        /// Name of the output file
+        /// </param>
+        /// Suggestion made by ggreig in Nov 2008, with thanks
+        public void RenderToFileIfNotExists(string fileName)
+        {
+            this.Output.File = fileName;
+            this.RenderIfNotExists();
         }
 
         /// <summary>
@@ -159,17 +188,17 @@ namespace T4Toolbox
                 this.Initialize();
 
                 // Verify pre-conditions 
-                this.Validate(); 
+                this.Validate();
                 if (!this.Errors.HasErrors)
                 {
                     // Generate output
-                    return this.TransformText(); 
+                    return this.TransformText();
                 }
             }
             catch (TransformationException e)
             {
                 // Report expected errors without exception call stack
-                this.Error(e.Message); 
+                this.Error(e.Message);
             }
 
             return this.GenerationEnvironment.ToString();

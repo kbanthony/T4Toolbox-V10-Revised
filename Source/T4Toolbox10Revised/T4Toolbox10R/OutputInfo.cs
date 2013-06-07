@@ -81,7 +81,18 @@ namespace T4Toolbox
         /// existing file when the code generator runs for the first time as well as when the output file
         /// is no longer re-generated. 
         /// </remarks>
-        public bool PreserveExistingFile { get; set; }
+        public bool PreserveExistingFile
+        {
+            get
+            {
+                return _preserveExistingFile;
+            }
+            set
+            {
+                _preserveExistingFile = value;
+            }
+        }
+        private bool _preserveExistingFile = false;
 
         /// <summary>
         /// Gets or sets path to the target project.

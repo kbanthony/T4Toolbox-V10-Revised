@@ -3,8 +3,14 @@ T4Toolbox-V10-Revised
 
 T4 Toolbox from Codeplex, but for Visual Studio 2012 and thus based on version 10.
 I wanted to see how the Directive Processor worked, but the VS2010 version would not open or compile in VS2012.
-I have created a VSIX to easily load the T4 Toolbox to Extensions, and in doing so removed the dual AppDomain feature of the Codeplex version.
-I have also changed the DTEDirectiveProcessor to a static class renamed to OutputProcessor.
-It was intended to be quick and dirty. It might not be reliable in all circumstances.
 May 2013
 
+Version 1.0.1 7-Jun-2013
+Added RenderToFileIfNotExists(file) in preference to PreserveExistingFile, as it's easy to make a mistake with a separate property.
+PreserveExistingFile now issues a warning.
+Internally, changed MSBuild Api to .Net 4.0 code.
+Another test program provided, TestT4Debugging10R.
+
+Version 1.0.0
+AppDomain switching removed because the Toolbox DLL needs to be in a common place for the serialisation/deserialisation to work.
+DTEDirectiveProcessor changed to a static class called OutputProcesser, as a quick way to make a code change.

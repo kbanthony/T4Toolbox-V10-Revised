@@ -1,0 +1,27 @@
+﻿<#+
+// <copyright file="Template1.tt" company="">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+public class Template1 : CSharpTemplate
+{
+    public override string TransformText()
+    {
+        //this.Output.PreserveExistingFile = true;
+        base.TransformText();
+        
+#>
+namespace <#= Identifier("Somenamespace") #>
+{
+    public class <#= Identifier("Sample Class") #>
+    {
+        private string <#= FieldName("Sample Field") #>;
+
+        public string <#= PropertyName("Sample Property") #> { get; set; }
+    }
+}
+<#+
+        return this.GenerationEnvironment.ToString();
+    }
+}
+#>

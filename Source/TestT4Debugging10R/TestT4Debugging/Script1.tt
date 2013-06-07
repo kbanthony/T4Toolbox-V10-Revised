@@ -1,0 +1,17 @@
+<#@ template language="C#" debug="True" hostspecific="True" #>
+<#@ output extension="txt" #>
+<#@ TransformationContext processor="T4Toolbox10R.TransformationContextProcessor" #>
+<#@ include file="Generator1.ttinclude" #>
+<#@ include file="Template1.ttinclude" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="T4Toolbox" #>
+<#
+// <copyright file="Script1.tt" company="">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+//System.Diagnostics.Debugger.Launch();
+//System.Diagnostics.Debugger.Break();
+    var gen = new Generator1(this);
+    gen.Run();
+#>
